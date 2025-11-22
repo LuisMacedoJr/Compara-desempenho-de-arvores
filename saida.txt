@@ -1,0 +1,7 @@
+Tempo total estimado: 2687 horas
+
+======== ESTATÍSTICAS ABP ===========
+Numero de Nodos: 3598
+Altura: 28
+Rotações: 0
+Comparações: 3058
