@@ -7,7 +7,11 @@ Rotações: 0
 Comparações: 3503
 
 ======== ESTATÍSTICAS AVL ===========
-Numero de Nodos: 3598
 Altura: 14
 Rotações: 1809
 Comparações: 2583
+
+======== ESTATÍSTICAS Splay ===========
+Altura: 5
+Rotações: 57748
+Comparações: 197

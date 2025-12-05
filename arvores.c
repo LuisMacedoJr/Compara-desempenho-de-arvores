@@ -222,18 +222,98 @@ Nodo* rotacao_dupla_esquerda(Nodo* a){
     return a;
 }
 
-int AlturaAVL(Nodo* a)
-{
-    int Alt_Esq, Alt_Dir;
-    if (a == NULL)
-        return 0;
-    else
-    {
-        Alt_Esq = AlturaAVL(a->esq);
-        Alt_Dir = AlturaAVL(a->dir);
-        if (Alt_Esq > Alt_Dir)
-            return (1 + Alt_Esq);
-        else
-            return (1 + Alt_Dir);
+//Splay
+Nodo* Splay(Nodo* a, char* nome, int* rot) {
+    if (a == NULL || strcmp(a->nome, nome) == 0)
+        return a;
+
+    if (strcmp(nome, a->nome) < 0) {
+        if (a->esq == NULL)
+            return a;
+
+        // rotacao zig zig
+        if (strcmp(nome, a->esq->nome) < 0) {
+            a->esq->esq = Splay(a->esq->esq, nome, rot);
+            (*rot)++;
+            a = rotacao_direita(a);
+        }
+        // rotacao zig zag
+        else if (strcmp(nome, a->esq->nome) > 0) {
+            a->esq->dir = Splay(a->esq->dir, nome, rot);
+            if (a->esq->dir != NULL){
+                (*rot)++;
+                a->esq = rotacao_esquerda(a->esq);
+            }
+        }
+
+        if (a->esq == NULL){
+            return a;
+        } else {
+            (*rot)++;
+            return rotacao_direita(a);
+        }
     }
+
+    else {
+        if (a->dir == NULL)
+            return a;
+
+        // rotacao zag zag
+        if (strcmp(nome, a->dir->nome) > 0) {
+            a->dir->dir = Splay(a->dir->dir, nome, rot);
+            (*rot)++;
+            a = rotacao_esquerda(a);
+        }
+        // rotacao zag zig
+        else if (strcmp(nome, a->dir->nome) < 0) {
+            a->dir->esq = Splay(a->dir->esq, nome, rot);
+            if (a->dir->esq != NULL) {
+                (*rot)++;
+                a->dir = rotacao_direita(a->dir);
+            }
+        }
+
+        if (a->dir == NULL){
+            return a;
+        } else {
+            (*rot)++;
+            return rotacao_esquerda(a);
+        }
+    }
+}
+
+Nodo* ConsultaNodo(Nodo* a, char* nome, int* rot, int* comp) {
+    //coloca o nodo desejado como raiz
+    (*comp)++;
+    return Splay(a, nome, rot);
+}
+
+Nodo* InsereSplay(Nodo* a, char* n, float t, int* rot) {
+    if (a == NULL) {
+        a = CriaNodo(n, t);
+    }
+
+    //primeiro faz o splay, para trazer para a raiz o nodo mais proximo do buscado
+    a = Splay(a, n, rot);
+
+    //caso o nodo buscado ja exista, retorna ele
+    if (strcmp(a->nome, n) == 0)
+        return a;
+
+    Nodo* novo = malloc(sizeof(Nodo));
+    strcpy(novo->nome, n);
+    novo->tempo = t;
+
+    if (strcmp(n, a->nome) < 0) {
+        novo->dir = a;
+        novo->esq = a->esq;
+        a->esq = NULL;
+    }
+    else {
+        novo->esq = a;
+        novo->dir = a->dir;
+        a->dir = NULL;
+    }
+
+    return novo;
 }

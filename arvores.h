@@ -26,6 +26,8 @@ Nodo* rotacao_direita(Nodo* a);
 Nodo* rotacao_esquerda(Nodo* a);
 Nodo* rotacao_dupla_direita (Nodo* a);
 Nodo* rotacao_dupla_esquerda (Nodo* a);
-int AlturaAVL(Nodo* a);
+Nodo* Splay(Nodo* a, char* nome, int* rot);
+Nodo* ConsultaNodo(Nodo* a, char* nome, int* rot, int* comp);
+Nodo* InsereSplay(Nodo* a, char* n, float t, int* rot);
 
 #endif
