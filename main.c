@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
     int comparacoesASp = 0, alturaASp, numeroDeRotacoesASp = 0;
 
     //separadores para leitura de arquivos
-    char separador[]= {",\n\t"};
+    char separador[]= {",\t\r\n\v\f"};
 
     Nodo* ABP = CriaArvore();
     Nodo* AVL = CriaArvore();
@@ -70,18 +70,21 @@ int main(int argc, char *argv[]){
             //Leitura da lista do jogador e consulta nas arvores
             while (fgets(linha, 1000, listaJogador)){
                 palavra = StringMinusculo(strtok(linha,separador));
+                printf("Iniciando busca pelo jogo: %s\n", palavra);
                 tempoTotalABP += TempoNodoArvore(ABP, palavra, &comparacoesABP);
                 numeroDeJogosABP++;
                 tempoTotalAVL += TempoNodoArvore(AVL, palavra, &comparacoesAVL); //usada para atualizar as comparações AVL
                 ConsultaNodo(ASp, palavra, &numeroDeRotacoesASp, &comparacoesASp); //usada para atualizar as comparações Splay
             }
 
+            // ImprimeABP(ABP);
+
             alturaABP = AlturaABP(ABP);
             alturaAVL = AlturaABP(AVL);
             alturaASp = AlturaABP(ASp);
 
             //Escrita dos dados no arquivo de saida
-            fprintf(saida, "Tempo total estimado: %.0lf horas\n", tempoTotalABP);
+            fprintf(saida, "Tempo total estimado: %.2lf horas\n", tempoTotalABP);
             fprintf(saida, "\n======== ESTATÍSTICAS ABP ===========\n");
             fprintf(saida, "Numero de Nodos: %d\n", numeroDeNodosABP);
             fprintf(saida, "Altura: %d\n", alturaABP);

@@ -22,14 +22,18 @@ Nodo* CriaNodo(char* n, float t){
 
 float TempoNodoArvore(Nodo* nodo, char* n, int* comp) {
     (*comp)++;
+    // printf("Iniciando comparacao de %s com %s\n", n, nodo->nome);
     if (nodo == NULL) {
         printf("Nao achou o jogo %s\n", n);
         return 0;
     } else if (strcmp(nodo->nome,n) < 0) {
+        // printf("Jogo %s maior que %s\n", n, nodo->nome);
         TempoNodoArvore(nodo->dir, n, comp);
     } else if (strcmp(nodo->nome,n) > 0) {
+        // printf("Jogo %s menor que %s\n", n, nodo->nome);
         TempoNodoArvore(nodo->esq, n, comp);
     } else if (strcmp(nodo->nome,n) == 0) {
+        // printf("Achou jogo %s\n", n);
         return nodo->tempo;
     }
 }
@@ -67,7 +71,8 @@ void InsereABP(char* n, float t, Nodo** nodo){
 void ImprimeABP(Nodo* nodo) {
     if (nodo != NULL) {
         ImprimeABP(nodo->esq);
-        printf("%s %.2f\n", nodo->nome, nodo->tempo);
+        // printf("%s %.2f\n", nodo->nome, nodo->tempo);
+        printf("%s\n", nodo->nome);
         ImprimeABP(nodo->dir);
     }
 }
