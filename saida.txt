@@ -1,7 +1,17 @@
-Tempo total estimado: 2687 horas
+Tempo total estimado: 0 horas
 
 ======== ESTATÍSTICAS ABP ===========
 Numero de Nodos: 3598
 Altura: 28
 Rotações: 0
-Comparações: 3058
+Comparações: 3503
+
+======== ESTATÍSTICAS AVL ===========
+Altura: 14
+Rotações: 1809
+Comparações: 2583
+
+======== ESTATÍSTICAS Splay ===========
+Altura: 5
+Rotações: 57748
+Comparações: 197

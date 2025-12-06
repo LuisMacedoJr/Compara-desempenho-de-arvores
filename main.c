@@ -5,9 +5,7 @@
 #include <locale.h>
 #include <time.h>
 #include <ctype.h>
-
 #include "arvores.h"
-
 
 int main(int argc, char *argv[]){
 
@@ -26,10 +24,21 @@ int main(int argc, char *argv[]){
     double tempoTotalABP = 0;
     int numeroDeJogosABP = 0, comparacoesABP = 0, numeroDeNodosABP = 0, alturaABP;
     
+    
+    // Variáveis utilizadas na AVL
+    double tempoTotalAVL = 0;
+    int comparacoesAVL = 0, alturaAVL, numeroDeRotacoesAVL = 0, ok;
+
+    // Variáveis utilizadas na Splay
+    double tempoTotalASp = 0;
+    int comparacoesASp = 0, alturaASp, numeroDeRotacoesASp = 0;
+
     //separadores para leitura de arquivos
     char separador[]= {",\n\t"};
 
-    Nodo* ABP = CriaABP();
+    Nodo* ABP = CriaArvore();
+    Nodo* AVL = CriaArvore();
+    Nodo* ASp = CriaArvore();
 
     if (argc!=4){
         printf("Número incorreto de parâmetros.\n Para chamar o programa digite: tempoJogos <arq_entrada> <arq_saida>\n");
@@ -52,7 +61,8 @@ int main(int argc, char *argv[]){
                 tempoDeJogo = (float)atof(strtok(NULL,separador));
                 InsereABP(palavra, tempoDeJogo, &ABP);
                 numeroDeNodosABP++;
-                //Rotinas para inserção de nodos em outras árvores podem ser incluídas aqui
+                AVL = InsereAVL(palavra, tempoDeJogo, AVL, &ok, &numeroDeRotacoesAVL);
+                ASp = InsereSplay(ASp, palavra, tempoDeJogo, &numeroDeRotacoesASp);
             }
 
             printf("Arvore gerada com sucesso\n");
@@ -60,12 +70,15 @@ int main(int argc, char *argv[]){
             //Leitura da lista do jogador e consulta nas arvores
             while (fgets(linha, 1000, listaJogador)){
                 palavra = StringMinusculo(strtok(linha,separador));
-                tempoTotalABP += TempoNodoABP(ABP, palavra, &comparacoesABP);
+                tempoTotalABP += TempoNodoArvore(ABP, palavra, &comparacoesABP);
                 numeroDeJogosABP++;
-                //Rotinas para consulta de nodos em outras árvores podem ser incluídas aqui
+                tempoTotalAVL += TempoNodoArvore(AVL, palavra, &comparacoesAVL); //usada para atualizar as comparações AVL
+                ConsultaNodo(ASp, palavra, &numeroDeRotacoesASp, &comparacoesASp); //usada para atualizar as comparações Splay
             }
 
             alturaABP = AlturaABP(ABP);
+            alturaAVL = AlturaABP(AVL);
+            alturaASp = AlturaABP(ASp);
 
             //Escrita dos dados no arquivo de saida
             fprintf(saida, "Tempo total estimado: %.0lf horas\n", tempoTotalABP);
@@ -74,7 +87,16 @@ int main(int argc, char *argv[]){
             fprintf(saida, "Altura: %d\n", alturaABP);
             fprintf(saida, "Rotações: 0\n");
             fprintf(saida, "Comparações: %d\n", comparacoesABP);
+            
+            fprintf(saida, "\n======== ESTATÍSTICAS AVL ===========\n");
+            fprintf(saida, "Altura: %d\n", alturaAVL);
+            fprintf(saida, "Rotações: %d\n", numeroDeRotacoesAVL);
+            fprintf(saida, "Comparações: %d\n", comparacoesAVL);
 
+            fprintf(saida, "\n======== ESTATÍSTICAS Splay ===========\n");
+            fprintf(saida, "Altura: %d\n", alturaASp);
+            fprintf(saida, "Rotações: %d\n", numeroDeRotacoesASp);
+            fprintf(saida, "Comparações: %d\n", comparacoesASp);
 
             end = clock();
             float milisegundos = (float)(end - start) / CLOCKS_PER_SEC * 1000;
