@@ -1,17 +1,20 @@
 Tempo total estimado: 2687.21 horas
+Numero de Nodos: 3598
 
 ======== ESTATÍSTICAS ABP ===========
-Numero de Nodos: 3598
 Altura: 28
 Rotações: 0
 Comparações: 3058
+Tempo de execução: 3.83ms
 
 ======== ESTATÍSTICAS AVL ===========
 Altura: 14
 Rotações: 1809
 Comparações: 2152
+Tempo de execução: 2.40ms
 
 ======== ESTATÍSTICAS Splay ===========
 Altura: 5
 Rotações: 57748
 Comparações: 197
+Tempo de execução: 3.15ms

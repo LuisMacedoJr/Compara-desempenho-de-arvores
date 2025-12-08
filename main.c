@@ -11,7 +11,9 @@ int main(int argc, char *argv[]){
 
     setlocale(LC_ALL,"");
 
-    clock_t start, end;
+    clock_t startMontagemAbp, endMontagemAbp, startConsultaAbp, endConsultaAbp;
+    clock_t startMontagemAvl, endMontagemAvl, startConsultaAvl, endConsultaAvl;
+    clock_t startMontagemSplay, endMontagemSplay, startConsultaSplay, endConsultaSplay;
 
     FILE* jogosSteam;
     FILE* listaJogador;
@@ -53,57 +55,97 @@ int main(int argc, char *argv[]){
         }
         else {
             saida = fopen (argv[3], "w");
-            start = clock();
-
+            
             //Leitura e inserção do arquivo de origem .csv
+            startMontagemAbp = clock();
             while (fgets(linha,1000,jogosSteam)){
                 palavra = StringMinusculo(strtok(linha,separador));
                 tempoDeJogo = (float)atof(strtok(NULL,separador));
                 InsereABP(palavra, tempoDeJogo, &ABP);
                 numeroDeNodosABP++;
+            }
+            endMontagemAbp = clock();
+
+            jogosSteam = fopen(argv[1], "r");
+
+            startMontagemAvl = clock();
+            while (fgets(linha,1000,jogosSteam)){
+                palavra = StringMinusculo(strtok(linha,separador));
+                tempoDeJogo = (float)atof(strtok(NULL,separador));
                 AVL = InsereAVL(palavra, tempoDeJogo, AVL, &ok, &numeroDeRotacoesAVL);
+            }
+            endMontagemAvl = clock();
+
+            jogosSteam = fopen(argv[1], "r");
+
+            startMontagemSplay = clock();
+            while (fgets(linha,1000,jogosSteam)){
+                palavra = StringMinusculo(strtok(linha,separador));
+                tempoDeJogo = (float)atof(strtok(NULL,separador));
+
                 ASp = InsereSplay(ASp, palavra, tempoDeJogo, &numeroDeRotacoesASp);
             }
+            endMontagemSplay = clock();
 
-            printf("Arvore gerada com sucesso\n");
 
+            startConsultaAbp = clock();
             //Leitura da lista do jogador e consulta nas arvores
             while (fgets(linha, 1000, listaJogador)){
                 palavra = StringMinusculo(strtok(linha,separador));
-                printf("Iniciando busca pelo jogo: %s\n", palavra);
                 tempoTotalABP += TempoNodoArvore(ABP, palavra, &comparacoesABP);
-                numeroDeJogosABP++;
+            }
+            endConsultaAbp = clock();
+
+            listaJogador = fopen(argv[2], "r");
+
+            startConsultaAvl = clock();
+            while (fgets(linha, 1000, listaJogador)){
+                palavra = StringMinusculo(strtok(linha,separador));
                 tempoTotalAVL += TempoNodoArvore(AVL, palavra, &comparacoesAVL); //usada para atualizar as comparações AVL
+            }
+            endConsultaAvl = clock();
+
+            listaJogador = fopen(argv[2], "r");
+
+            startConsultaSplay = clock();
+            while (fgets(linha, 1000, listaJogador)){
+                palavra = StringMinusculo(strtok(linha,separador));
                 ConsultaNodo(ASp, palavra, &numeroDeRotacoesASp, &comparacoesASp); //usada para atualizar as comparações Splay
             }
-
-            // ImprimeABP(ABP);
+            endConsultaSplay = clock();
 
             alturaABP = AlturaABP(ABP);
             alturaAVL = AlturaABP(AVL);
             alturaASp = AlturaABP(ASp);
 
+            float milisegundosAbp = (float)((endMontagemAbp - startMontagemAbp) + (endConsultaAbp - startConsultaAbp)) / CLOCKS_PER_SEC * 1000;
+            float milisegundosAvl = (float)((endMontagemAvl - startMontagemAvl) + (endConsultaAvl - startConsultaAvl)) / CLOCKS_PER_SEC * 1000;
+            float milisegundosSplay = (float)((endMontagemSplay - startMontagemSplay) + (endConsultaSplay - startConsultaSplay)) / CLOCKS_PER_SEC * 1000;
+
             //Escrita dos dados no arquivo de saida
             fprintf(saida, "Tempo total estimado: %.2lf horas\n", tempoTotalABP);
-            fprintf(saida, "\n======== ESTATÍSTICAS ABP ===========\n");
             fprintf(saida, "Numero de Nodos: %d\n", numeroDeNodosABP);
+
+            fprintf(saida, "\n======== ESTATÍSTICAS ABP ===========\n");
             fprintf(saida, "Altura: %d\n", alturaABP);
             fprintf(saida, "Rotações: 0\n");
             fprintf(saida, "Comparações: %d\n", comparacoesABP);
+            fprintf(saida, "Tempo de execução: %.2fms\n", milisegundosAbp);
             
             fprintf(saida, "\n======== ESTATÍSTICAS AVL ===========\n");
             fprintf(saida, "Altura: %d\n", alturaAVL);
             fprintf(saida, "Rotações: %d\n", numeroDeRotacoesAVL);
             fprintf(saida, "Comparações: %d\n", comparacoesAVL);
+            fprintf(saida, "Tempo de execução: %.2fms\n", milisegundosAvl);
+
 
             fprintf(saida, "\n======== ESTATÍSTICAS Splay ===========\n");
             fprintf(saida, "Altura: %d\n", alturaASp);
             fprintf(saida, "Rotações: %d\n", numeroDeRotacoesASp);
             fprintf(saida, "Comparações: %d\n", comparacoesASp);
+            fprintf(saida, "Tempo de execução: %.2fms\n", milisegundosSplay);
 
-            end = clock();
-            float milisegundos = (float)(end - start) / CLOCKS_PER_SEC * 1000;
-            printf("Tempo: %.5f ms\n", milisegundos);
+
         }
 
         fclose(jogosSteam);
