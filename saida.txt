@@ -5,16 +5,16 @@ Numero de Nodos: 3598
 Altura: 28
 Rotações: 0
 Comparações: 3058
-Tempo de execução: 3.83ms
+Tempo de execução: 5.12ms
 
 ======== ESTATÍSTICAS AVL ===========
 Altura: 14
 Rotações: 1809
 Comparações: 2152
-Tempo de execução: 2.40ms
+Tempo de execução: 4.62ms
 
 ======== ESTATÍSTICAS Splay ===========
 Altura: 5
 Rotações: 57748
 Comparações: 197
-Tempo de execução: 3.15ms
+Tempo de execução: 5.43ms

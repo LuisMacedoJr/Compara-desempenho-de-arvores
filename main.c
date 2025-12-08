@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
     Nodo* ASp = CriaArvore();
 
     if (argc!=4){
-        printf("Número incorreto de parâmetros.\n Para chamar o programa digite: tempoJogos <arq_entrada> <arq_saida>\n");
+        printf("Número incorreto de parâmetros.\n Para chamar o programa digite: tempoJogos <arq_entrada.csv> <lista_entrada.txt> <arq_saida>\n");
         return 1;
     }
     else {
